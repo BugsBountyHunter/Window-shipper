@@ -13,6 +13,12 @@ class MainVC: UIViewController {
     @IBOutlet weak var wageTxt: CurrencyTxtField!
     
     @IBOutlet weak var priceTxt: CurrencyTxtField!
+    
+    @IBOutlet weak var resultLbl: UILabel!
+    
+    @IBOutlet weak var hoursLbl: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,6 +29,8 @@ class MainVC: UIViewController {
         calcBtn.setTitle("Calculate", for: .normal)
         calcBtn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         
+        
+        // action when click on clear button
         calcBtn.addTarget(self, action:#selector(MainVC.calculate), for: .touchUpInside)
         
         
@@ -30,18 +38,43 @@ class MainVC: UIViewController {
         priceTxt.inputAccessoryView = calcBtn
         
         
+    // when application Run i need disapper hours and result lable
         
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
         
-        
-        
+  
+      
     }
     
     
     @objc func calculate(){
-    
-       print("Calculate Touched")
+        
+        if let wageString = wageTxt.text , let priceString = priceTxt.text {
+            
+            if let wageDouble = Double(wageString) , let priceDouble = Double(priceString){
+                view.endEditing(true)
+                resultLbl.isHidden = false
+                hoursLbl.isHidden = false
+                
+                resultLbl.text = "\(Wage.getHours(forWage:wageDouble, andPrice: priceDouble))"
+            }
+            
+        }
+
     }
 
+   
+    @IBAction func clearBtnPressed(_ sender: Any) {
+        // clear
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
+        
+        // and clear data in txt field
+        
+        wageTxt.text = ""
+        priceTxt.text = ""
+    }
 
 
 }
